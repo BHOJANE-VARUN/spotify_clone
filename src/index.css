@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 /* Active Navigation Link */
+#root{
+  height: inherit;
+}
 .active {
   @apply text-cyan-500;
 }
