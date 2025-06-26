@@ -64,7 +64,7 @@ const TopPlay = () => {
   if(divRef.current)
   divRef.current.scrollIntoView({ behavior: 'smooth' });
   return (
-    <div ref={divRef} className="xl:ml-6 ml-0 xl:mb-0 mb-6 flex-1 xl:max-w-[500px] max-w-full flex flex-col h-full">
+    <div ref={divRef} className="xl:ml-6 ml-0 xl:mb-0 mb-6 flex-1 xl:max-w-[500px] max-w-full flex flex-col">
       <div className="w-full flex flex-col">
         <div className="flex flex-row justify-between items-center">
           <h2 className="text-white font-bold text-2xl">Top Charts</h2>
@@ -88,7 +88,7 @@ const TopPlay = () => {
         </div>
       </div>
 
-      <div className="w-full flex flex-col mt-8">
+      <div className="w-full flex flex-col">
         <div className="flex flex-row justify-between items-center">
           <h2 className="text-white font-bold text-2xl">Top Artists</h2>
           <Link to="/top-artists">
@@ -112,7 +112,7 @@ const TopPlay = () => {
       style={{ width: '25%', height: 'auto' }}
       className="shadow-lg rounded-full animate-slideright"
     >
-              <SliderCard key={artist.id} time={index*1000} artistid={artist?.relationships?.artists?.data?.[0].id} /></SwiperSlide>
+              <SliderCard key={artist.id} time={index*2000} artistid={artist?.relationships?.artists?.data?.[0].id} /></SwiperSlide>
           ))}
         </Swiper>
       </div>
