@@ -4,7 +4,26 @@ import { Link } from 'react-router-dom';
 
 import PlayPause from './PlayPause';
 
-const SongBar = ({ song, i, artistId, isPlaying, activeSong, handlePauseClick, handlePlayClick }) => (
+
+const SongBar = ({ song, i, artistId, isPlaying, activeSong, handlePauseClick, handlePlayClick }) =>{ 
+  
+const newSong = {
+  ...song,
+  attributes: {
+    albumName: song.title,
+    artistName: song.subtitle,
+    previews: [
+      {
+        url: song?.hub?.actions?.[1]?.uri || null,
+      },
+    ],
+    artwork:{
+      url:song?.images?.coverart,
+    }
+  },
+};
+
+  return  (
   <div className={`w-full flex flex-row items-center hover:bg-[#4c426e] ${activeSong?.title === song?.title ? 'bg-[#4c426e]' : 'bg-transparent'} py-2 p-4 rounded-lg cursor-pointer mb-2`}>
     <h3 className="font-bold text-base text-white mr-3">{i + 1}.</h3>
     <div className="flex-1 flex flex-row justify-between items-center">
@@ -15,18 +34,22 @@ const SongBar = ({ song, i, artistId, isPlaying, activeSong, handlePauseClick, h
       />
       <div className="flex-1 flex flex-col justify-center mx-3">
         {!artistId ? (
-          <Link to={`/songs/${song.key}`}>
+          <Link to={`/songs/${song?.hub?.actions?.[0]?.id}`}>
             <p className="text-xl font-bold text-white">
               {song?.title}
             </p>
           </Link>
         ) : (
-          <p className="text-xl font-bold text-white">
-            {song?.attributes?.name}
-          </p>
+          <p>
+          <Link to={`/songs/${song?.id}`}>
+            {song.attributes?.albumName}
+          </Link>
+        </p>
         )}
-        <p className="text-base text-gray-300 mt-1">
-          {artistId ? song?.attributes?.albumName : song?.subtitle}
+        <p className="text-sm truncate text-gray-300 mt-1">
+          <Link to={newSong.relationships?.artists?.data ? `/artists/${song?.relationships?.artists?.data?.[0]?.id}` : '/top-artists'}>
+            {song?.subtitle}
+          </Link>
         </p>
       </div>
     </div>
@@ -35,13 +58,14 @@ const SongBar = ({ song, i, artistId, isPlaying, activeSong, handlePauseClick, h
         <PlayPause
           isPlaying={isPlaying}
           activeSong={activeSong}
-          song={song}
+          song={newSong}
           handlePause={handlePauseClick}
-          handlePlay={() => handlePlayClick(song, i)}
+          handlePlay={() => handlePlayClick(newSong, i)}
         />
       )
       : null}
   </div>
 );
+}
 
 export default SongBar;

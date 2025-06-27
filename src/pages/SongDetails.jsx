@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { DetailsHeader, Error, Loader, RelatedSongs } from '../components';
@@ -11,26 +11,36 @@ const SongDetails = () => {
   const { songid } = useParams();
   const { activeSong, isPlaying } = useSelector((state) => state.player);
 
-//   const { data, isFetching: isFetchinRelatedSongs, error } = useGetSongRelatedQuery(songid);
   const { data: songData, isFetching: isFetchingSongDetails } = useGetSongDetailsQuery(songid);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
-  if (isFetchingSongDetails) return <Loader title="Searching song details" />;
-  if (isFetchingSongDetails ) return <Loader title="Searching song details" />;
+  const otherId = useMemo(() => {
+    return songData?.data?.[0].id; 
+  }, [songData]);
 
-  
+  const {
+    data: relatedSongsData,
+    isFetching: isFetchingRelatedSongs,
+    error: relatedSongsError,
+  } = useGetSongRelatedQuery(otherId, {
+    skip: !otherId,
+  });
 
-//   if (error) return <Error />;
+  if (isFetchingSongDetails && isFetchingRelatedSongs) return <Loader title="Searching song details" />;
+  if (relatedSongsError) return <Error />;
 
   const handlePauseClick = () => {
     dispatch(playPause(false));
   };
 
   const handlePlayClick = (song, i) => {
-    dispatch(setActiveSong({ song, data, i }));
+    dispatch(setActiveSong({ song, data: relatedSongsData, i }));
     dispatch(playPause(true));
   };
-  const lycis = Object.values(songData?.resources?.lyrics || {})?.[0]?.attributes?.text;
 
+  const lycis = Object.values(songData?.resources?.lyrics || {})?.[0]?.attributes?.text;
 
   return (
     <div className="flex flex-col">
@@ -42,7 +52,6 @@ const SongDetails = () => {
 
       <div className="mb-10">
         <h2 className="text-white text-3xl font-bold">Lyrics:</h2>
-
         <div className="mt-5">
           {lycis && lycis.length > 0
             ? lycis.map((line, i) => (
@@ -54,15 +63,14 @@ const SongDetails = () => {
         </div>
       </div>
 
-      {/* <RelatedSongs
-        data={data}
+      <RelatedSongs
+        data={relatedSongsData}
         artistId={null}
         isPlaying={isPlaying}
         activeSong={activeSong}
         handlePauseClick={handlePauseClick}
         handlePlayClick={handlePlayClick}
-      /> */}
-
+      />
     </div>
   );
 };

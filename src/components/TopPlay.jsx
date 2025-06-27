@@ -108,7 +108,7 @@ const TopPlay = () => {
         >
           {topPlays?.slice(0, 5).map((artist,index) => (
                 <SwiperSlide
-      key={artist?.key}
+      key={artist?.id}
       style={{ width: '25%', height: 'auto' }}
       className="shadow-lg rounded-full animate-slideright"
     >

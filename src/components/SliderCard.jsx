@@ -5,6 +5,7 @@ import { SwiperSlide } from "swiper/react";
 
 function SliderCard({ artistid, time }) {
   const [data, setData] = React.useState(null);
+  
   React.useEffect(() => {
     const curTime = setTimeout(async () => {
       const Raw = await fetch(
@@ -14,7 +15,7 @@ function SliderCard({ artistid, time }) {
           headers: {
             "x-rapidapi-host": "shazam-core.p.rapidapi.com",
             "x-rapidapi-key":
-              "29832f5b28msh4b7df5f357a5997p13adaejsn9f233b3d3b03",
+              "ce5f5cf2cbmsh3141fca85778b6cp16a433jsn839235a200e3",
           },
         }
       );
